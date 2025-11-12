@@ -33,7 +33,6 @@
     <div class="wrap">
         <div class="card">
             <h1>Facilitation Style Self-Assessment</h1>
-    <p>&nbsp;</p>
             <label>Your name (optional)
                 <input type="text" id="name" placeholder="e.g., Alex Rivera" />
             </label>
@@ -55,7 +54,7 @@
                     <ul class="summary" id="summaryList"></ul>
                     <label for="summaryText" class="tip">Selectable summary (fallback for clipboard issues)</label>
                     <textarea id="summaryText" readonly style="width:100%;min-height:140px;padding:8px;border-radius:8px;border:1px solid #ddd;background:#fafafa;margin-top:8px"></textarea>
-                    <div class="tip">Tip: Screenshot or copy the summary into website, performance review, or other related areas.</div>
+                    <div class="tip">Tip: Screenshot or copy the summary into website, performance review, or other related documents.</div>
                     <div id="toast" role="status" aria-live="polite" style="position:fixed;right:18px;bottom:18px;background:#111;color:#fff;padding:8px 12px;border-radius:8px;display:none;opacity:0.95;font-size:13px"></div>
         </div>
     </div>
@@ -67,10 +66,10 @@
             {key:"Agenda",       label:"Agenda Management",        left:"stick to agenda", right:"flexible"},
             {key:"Emotion",      label:"Expression of Emotion",    left:"hide emotion",  right:"speak with emotion"},
             {key:"Communication",label:"Communication Style",      left:"linear",        right:"story-based"},
-            {key:"Movement",     label:"Body Movement",            left:"still",         right:"gesture"},
+            {key:"Movement",     label:"Body Movement",            left:"still",         right:"gestures"},
             {key:"Space",        label:"Physical Space",           left:"more space",    right:"close/touch"},
             {key:"Teaching",     label:"Teaching Approach",        left:"facts & figures", right:"stories"},
-            {key:"Facilitation", label:"Facilitation Movement",    left:"stand",         right:"move"}
+            {key:"Facilitation", label:"Facilitation Movement",    left:"stand in place",  right:"move around"}
         ];
 
         // Nuanced 1–5 phrasing (“I …”) per dimension
@@ -78,7 +77,7 @@
            Conflict: [
     "I am very conflict avoidant",                // 1
     "I usually avoid conflict",                   // 2
-    "I have an even mix of avoiding and embracing conflict", // 3 (balance)
+    "I sometimes embrace and sometimes avoid conflict", // 3 (balance)
     "I usually embrace conflict",                 // 4
     "I am very comfortable embracing conflict"    // 5
   ],
@@ -101,11 +100,11 @@
     "I usually keep my emotions reserved",         // 2
     "I balance being reserved and speaking with emotion", // 3
     "I usually speak with emotion",                // 4
-    "I am very expressive / emotion-forward"       // 5
+    "I am very expressive and open with my emotions"       // 5
   ],
   Communication: [
     "I very much like to make points in a linear fashion", // 1
-    "I usually communicate in a linear way",       // 2
+    "I usually communicate using linear points",       // 2
     "I balance linear and story-based communication", // 3
     "I usually communicate through stories",       // 4
     "I am very story-based in how I communicate"   // 5
@@ -122,7 +121,7 @@
     "I usually prefer more space",                 // 2
     "I balance giving space and being close",      // 3
     "I am usually comfortable being close",        // 4
-    "I am very comfortable being close / using appropriate touch" // 5
+    "I am very comfortable being close/using appropriate touch" // 5
   ],
   Teaching: [
     "I like to use facts and figures to teach",    // 1
