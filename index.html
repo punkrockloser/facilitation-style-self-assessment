@@ -1,3 +1,11 @@
+Absolutely—here’s your file with **only** the ARIA tweaks needed so screen readers announce the range meaning. I added:
+
+* `aria-valuetext` that updates live with the human-readable phrase.
+* A hidden “1 = …; 5 = …” descriptor per slider, referenced in `aria-describedby`.
+
+Everything else is unchanged.
+
+```html
 <!doctype html>
 <html lang="en">
 <head>
@@ -13,13 +21,13 @@
         .sub{margin:0 0 12px;color:#555}
         label{display:block;margin-bottom:12px;font-size:14px}
         input[type=text]{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:10px}
-    .sliders{display:grid;gap:12px}
+        .sliders{display:grid;gap:12px}
         .item{border:1px solid #eee;padding:12px;border-radius:12px}
         .row{display:flex;justify-content:space-between;align-items:flex-end;gap:8px}
         .row h4{margin:0;font-size:14px}
         .val{font-size:12px;color:#666}
         input[type=range]{width:100%}
-    .sr-only{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+        .sr-only{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
         .anchors{display:flex;justify-content:space-between;font-size:12px;color:#555;margin-top:6px}
         .results .head{display:flex;justify-content:space-between;align-items:center}
         .copy{border:1px solid #ddd;padding:6px 10px;border-radius:10px;background:#fff;cursor:pointer}
@@ -41,21 +49,21 @@
         </div>
 
         <div class="card results" role="region" aria-live="polite">
-                    <div class="head">
-                        <h3>Your Results (Live)</h3>
-                        <div style="display:flex;gap:8px;align-items:center">
-                            <button class="copy" id="copy">Copy summary</button>
-                            <button class="copy" id="copyJson">Copy JSON</button>
-                            <button class="copy" id="downloadCsv">Download CSV</button>
-                            <button class="copy" id="reset">Reset</button>
-                        </div>
-                    </div>
-                    <div class="name" id="nameLine" style="display:none;"></div>
-                    <ul class="summary" id="summaryList"></ul>
-                    <label for="summaryText" class="tip">Selectable summary (fallback for clipboard issues)</label>
-                    <textarea id="summaryText" readonly style="width:100%;min-height:140px;padding:8px;border-radius:8px;border:1px solid #ddd;background:#fafafa;margin-top:8px"></textarea>
-                    <div class="tip">Tip: Screenshot or copy the summary into website, performance review, or other related documents.</div>
-                    <div id="toast" role="status" aria-live="polite" style="position:fixed;right:18px;bottom:18px;background:#111;color:#fff;padding:8px 12px;border-radius:8px;display:none;opacity:0.95;font-size:13px"></div>
+            <div class="head">
+                <h3>Your Results (Live)</h3>
+                <div style="display:flex;gap:8px;align-items:center">
+                    <button class="copy" id="copy">Copy summary</button>
+                    <button class="copy" id="copyJson">Copy JSON</button>
+                    <button class="copy" id="downloadCsv">Download CSV</button>
+                    <button class="copy" id="reset">Reset</button>
+                </div>
+            </div>
+            <div class="name" id="nameLine" style="display:none;"></div>
+            <ul class="summary" id="summaryList"></ul>
+            <label for="summaryText" class="tip">Selectable summary (fallback for clipboard issues)</label>
+            <textarea id="summaryText" readonly style="width:100%;min-height:140px;padding:8px;border-radius:8px;border:1px solid #ddd;background:#fafafa;margin-top:8px"></textarea>
+            <div class="tip">Tip: Screenshot or copy the summary into website, performance review, or other related documents.</div>
+            <div id="toast" role="status" aria-live="polite" style="position:fixed;right:18px;bottom:18px;background:#111;color:#fff;padding:8px 12px;border-radius:8px;display:none;opacity:0.95;font-size:13px"></div>
         </div>
     </div>
 
@@ -74,70 +82,70 @@
 
         // Nuanced 1–5 phrasing (“I …”) per dimension
         const phrases = {
-           Conflict: [
-    "I am very conflict avoidant",                // 1
-    "I usually avoid conflict",                   // 2
-    "I sometimes embrace and sometimes avoid conflict", // 3 (balance)
-    "I usually embrace conflict",                 // 4
-    "I am very comfortable embracing conflict"    // 5
-  ],
-  Processing: [
-    "I am a very nonverbal processor",            // 1
-    "I am usually a nonverbal processor",         // 2
-    "I use an even mix of nonverbal and verbal processing", // 3
-    "I am usually a verbal processor",            // 4
-    "I am a very verbal processor"                // 5
-  ],
-  Agenda: [
-    "I am very strict about sticking to the agenda", // 1
-    "I usually stick to the agenda",               // 2
-    "I sometimes stick to the agenda and am sometimes flexible with it", // 3
-    "I am usually flexible with the agenda",       // 4
-    "I am very flexible with the agenda"           // 5
-  ],
-  Emotion: [
-    "I strongly hide or downplay emotion",         // 1
-    "I usually keep my emotions reserved",         // 2
-    "I balance being reserved and speaking with emotion", // 3
-    "I usually speak with emotion",                // 4
-    "I am very expressive and open with my emotions"       // 5
-  ],
-  Communication: [
-    "I very much like to make points in a linear fashion", // 1
-    "I usually communicate using linear points",       // 2
-    "I balance linear and story-based communication", // 3
-    "I usually communicate through stories",       // 4
-    "I am very story-based in how I communicate"   // 5
-  ],
-  Movement: [
-    "I stay very still while facilitating",        // 1
-    "I usually stay still",                        // 2
-    "I balance being still and using gestures",    // 3
-    "I usually use gestures",                      // 4
-    "I gesture frequently when I facilitate"       // 5
-  ],
-  Space: [
-    "I strongly prefer more physical space",       // 1
-    "I usually prefer more space",                 // 2
-    "I balance giving space and being close",      // 3
-    "I am usually comfortable being close",        // 4
-    "I am very comfortable being close/using appropriate touch" // 5
-  ],
-  Teaching: [
-    "I like to use facts and figures to teach",    // 1
-    "I usually rely on facts & figures to teach",  // 2
-    "I balance facts & figures and stories",       // 3
-    "I usually teach with stories/examples",       // 4
-    "I am very story-based in teaching"            // 5
-  ],
-  Facilitation: [
-    "I stand in one spot almost all the time",     // 1
-    "I usually stand in one spot",                 // 2
-    "I balance standing in one spot and moving around",// 3
-    "I usually move around the room",              // 4
-    "I am very active and move around a lot"       // 5
-  ]
-};
+          Conflict: [
+            "I am very conflict avoidant",
+            "I usually avoid conflict",
+            "I sometimes embrace and sometimes avoid conflict",
+            "I usually embrace conflict",
+            "I am very comfortable embracing conflict"
+          ],
+          Processing: [
+            "I am a very nonverbal processor",
+            "I am usually a nonverbal processor",
+            "I use an even mix of nonverbal and verbal processing",
+            "I am usually a verbal processor",
+            "I am a very verbal processor"
+          ],
+          Agenda: [
+            "I am very strict about sticking to the agenda",
+            "I usually stick to the agenda",
+            "I sometimes stick to the agenda and am sometimes flexible with it",
+            "I am usually flexible with the agenda",
+            "I am very flexible with the agenda"
+          ],
+          Emotion: [
+            "I strongly hide or downplay emotion",
+            "I usually keep my emotions reserved",
+            "I balance being reserved and speaking with emotion",
+            "I usually speak with emotion",
+            "I am very expressive and open with my emotions"
+          ],
+          Communication: [
+            "I very much like to make points in a linear fashion",
+            "I usually communicate using linear points",
+            "I balance linear and story-based communication",
+            "I usually communicate through stories",
+            "I am very story-based in how I communicate"
+          ],
+          Movement: [
+            "I stay very still while facilitating",
+            "I usually stay still",
+            "I balance being still and using gestures",
+            "I usually use gestures",
+            "I gesture frequently when I facilitate"
+          ],
+          Space: [
+            "I strongly prefer more physical space",
+            "I usually prefer more space",
+            "I balance giving space and being close",
+            "I am usually comfortable being close",
+            "I am very comfortable being close/using appropriate touch"
+          ],
+          Teaching: [
+            "I like to use facts and figures to teach",
+            "I usually rely on facts & figures to teach",
+            "I balance facts & figures and stories",
+            "I usually teach with stories/examples",
+            "I am very story-based in teaching"
+          ],
+          Facilitation: [
+            "I stand in one spot almost all the time",
+            "I usually stand in one spot",
+            "I balance standing in one spot and moving around",
+            "I usually move around the room",
+            "I am very active and move around a lot"
+          ]
+        };
 
         const state = { name: "", scores: {} };
         dims.forEach(d => state.scores[d.key] = 3);
@@ -157,15 +165,24 @@
                     <h4 id="label-${d.key}">${d.label}</h4>
                     <div class="val"><span id="val-${d.key}" class="v">3</span>/5</div>
                 </div>
-                <input id="range-${d.key}" name="${d.key}" type="range" min="1" max="5" step="1" value="3" class="range" aria-labelledby="label-${d.key}" aria-describedby="desc-${d.key}" />
+                <input id="range-${d.key}" name="${d.key}" type="range" min="1" max="5" step="1" value="3"
+                       class="range"
+                       aria-labelledby="label-${d.key}"
+                       aria-describedby="desc-${d.key} ends-${d.key}"
+                       aria-valuemin="1" aria-valuemax="5" aria-valuenow="3"
+                       aria-valuetext="${phrases[d.key][2]}" />
                 <div class="anchors"><span>${d.left}</span><span>${d.right}</span></div>
                 <div id="desc-${d.key}" class="sr-only">${phrases[d.key][2]}</div>
+                <span id="ends-${d.key}" class="sr-only">1 = ${d.left}; 5 = ${d.right}</span>
             `;
             const range = div.querySelector(".range");
             const v     = div.querySelector(".v");
             range.addEventListener("input", () => {
                 state.scores[d.key] = parseInt(range.value, 10);
                 v.textContent = range.value;
+                // ARIA: keep screen readers in sync with the human-readable meaning
+                range.setAttribute("aria-valuenow", range.value);
+                range.setAttribute("aria-valuetext", phrases[d.key][range.value - 1]);
                 render();
             });
             sliders.appendChild(div);
@@ -269,7 +286,7 @@
         document.getElementById('reset').addEventListener('click', ()=>{
             state.name = '';
             nameInput.value = '';
-            dims.forEach(d => { state.scores[d.key] = 3; const r = document.getElementById(`range-${d.key}`); if (r) r.value = 3; });
+            dims.forEach(d => { state.scores[d.key] = 3; const r = document.getElementById(`range-${d.key}`); if (r) { r.value = 3; r.setAttribute("aria-valuenow","3"); r.setAttribute("aria-valuetext", phrases[d.key][2]); } });
             render();
             showToast('Reset to defaults');
         });
@@ -279,3 +296,4 @@
     </script>
 </body>
 </html>
+```
